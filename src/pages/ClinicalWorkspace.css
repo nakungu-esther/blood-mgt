@@ -1,0 +1,65 @@
+﻿.abc-workspace{font-family:Inter,system-ui,sans-serif;color:#142b4b;max-width:1650px;margin:auto;padding:6px 2px 28px}
+.abc-workspace *{box-sizing:border-box}
+.abc-heading,.abc-heading-left,.abc-card-header{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.abc-heading{margin-bottom:20px}
+.abc-heading-left{justify-content:flex-start}
+.abc-heading-icon{width:46px;height:46px;border-radius:50%;background:#e4efff;color:#1165e8;display:grid;place-items:center}
+.abc-heading h1{font-size:25px;font-weight:800;letter-spacing:-.5px;margin:0 0 4px}
+.abc-heading p{font-size:11px;color:#758aa5;margin:0}
+.abc-primary{display:inline-flex;align-items:center;gap:7px;background:#0862eb;border:0;border-radius:6px;color:white;padding:11px 14px;font-size:11px;font-weight:750;cursor:pointer}
+.abc-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.abc-metric{display:flex;align-items:center;gap:13px;background:white;border:1px solid #e1eaf5;border-radius:7px;padding:17px;min-height:100px}
+.abc-metric-icon{width:45px;height:45px;flex-shrink:0;display:grid;place-items:center;border-radius:50%}
+.abc-blue{background:#e3efff;color:#0b64e5}.abc-green{background:#def8ed;color:#0da76c}.abc-red{background:#ffe6e9;color:#e32d43}.abc-orange{background:#fff0db;color:#f0921d}
+.abc-metric span:not(.abc-metric-icon){display:block;font-size:11px;color:#617c9f}
+.abc-metric strong{display:block;font-size:25px;line-height:1.3;margin:3px 0}
+.abc-metric small{font-size:9px;color:#8398b0}
+.abc-body{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:13px}
+.abc-main,.abc-aside{display:grid;align-content:start;gap:12px;min-width:0}
+.abc-card{background:white;border:1px solid #e1eaf5;border-radius:7px;padding:15px;min-width:0}
+.abc-filters{display:grid;grid-template-columns:minmax(160px,1.5fr) repeat(2,minmax(100px,1fr)) auto;gap:9px;align-items:center}
+.abc-search{display:flex;align-items:center;gap:8px;border:1px solid #dce6f3;border-radius:5px;padding:0 10px;color:#8ba0bc}
+.abc-search input{border:0;outline:0;min-width:0;width:100%;padding:10px 0;font-size:10px;color:#24466f}
+.abc-filters select{min-width:0;width:100%;border:1px solid #dce6f3;border-radius:5px;padding:10px 8px;background:white;color:#355276;font-size:10px}
+.abc-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #d6e3f5;border-radius:5px;background:white;color:#1764ce;padding:8px 10px;font-size:10px;font-weight:650;cursor:pointer}
+.abc-card-header{margin-bottom:14px}
+.abc-card-header h2{font-size:13px;font-weight:800;margin:0}
+.abc-header-actions{display:flex;gap:6px}
+.abc-table-card{padding:0;overflow:hidden}
+.abc-table-card>.abc-card-header{padding:14px;margin:0}
+.abc-table-scroll{overflow-x:auto}
+.abc-table-card table{border-collapse:collapse;width:100%;text-align:left;font-size:10px}
+.abc-table-card th{background:#f2f6fc;color:#3b587b;padding:12px 9px;white-space:nowrap}
+.abc-table-card td{padding:12px 9px;border-bottom:1px solid #edf2f8;color:#385575;white-space:nowrap}
+.abc-status{display:inline-block;padding:5px 10px;border-radius:20px;background:#edf2f8;font-size:9px}
+.abc-status-active,.abc-status-passed,.abc-status-completed{background:#dcf7e9;color:#07844d}
+.abc-status-failed,.abc-status-deferred{background:#ffe0e4;color:#c42b3d}
+.abc-status-pending{background:#fff0d8;color:#b96e0a}
+.abc-view{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;background:#f1f7ff;border:1px solid #dbe8ff;border-radius:5px;color:#0862dc;cursor:pointer;font-size:10px}
+.abc-pagination{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;font-size:10px;color:#7890af}
+.abc-pagination>div{display:flex;align-items:center;gap:10px}
+.abc-pagination button{border:1px solid #dce7f5;background:white;border-radius:5px;padding:7px 9px;color:#145bc4;cursor:pointer}
+.abc-pagination button:disabled{opacity:.4;cursor:default}
+.abc-donut-content{display:flex;align-items:center;justify-content:center;gap:18px;min-height:210px}
+.abc-donut{width:145px;height:145px;border-radius:50%;padding:26px;flex-shrink:0}
+.abc-donut>div{background:white;border-radius:50%;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.abc-donut strong{font-size:20px}.abc-donut small{font-size:9px;color:#8294aa}
+.abc-legend{display:grid;gap:9px;flex:1;min-width:0}
+.abc-legend>div{display:flex;align-items:center;gap:6px;font-size:10px}
+.abc-legend i{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.abc-legend span{flex:1}.abc-legend strong{font-size:10px}
+.abc-activity{display:flex;align-items:center;gap:9px;padding:12px 0;border-bottom:1px solid #edf2f8;font-size:11px}
+.abc-activity span:nth-child(2){flex:1}
+.abc-activity-dot{width:9px;height:9px;border-radius:50%;background:#20b987}
+.abc-note{font-size:10px;line-height:1.5;color:#8496aa}
+.abc-empty{text-align:center;padding:32px 10px;color:#8396ae;font-size:11px}
+.abc-error{background:#fff0f1;color:#b9273a;border:1px solid #ffd4d8;border-radius:6px;padding:12px;font-size:11px;margin-bottom:14px}
+.abc-overlay{position:fixed;inset:0;background:#0b1c35aa;z-index:1000;display:grid;place-items:center;padding:20px}
+.abc-dialog{background:white;border-radius:10px;padding:22px;width:min(530px,100%);max-height:80vh;overflow:auto}
+.abc-detail{display:flex;justify-content:space-between;gap:15px;padding:11px 0;border-bottom:1px solid #edf2f8;font-size:11px}
+.abc-detail span{color:#8293a7}.abc-detail strong{text-align:right;overflow-wrap:anywhere}
+.abc-info{background:#f4f8fd;padding:17px;border-radius:8px;font-size:12px;color:#3b5674;line-height:1.6}
+.abc-info svg{color:#d88c19}
+@media(max-width:1150px){.abc-body{grid-template-columns:1fr}.abc-aside{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){.abc-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.abc-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:550px){.abc-heading{align-items:flex-start;flex-direction:column}.abc-metric{padding:11px;gap:8px}.abc-metric-icon{width:35px;height:35px}.abc-metric strong{font-size:20px}.abc-aside{grid-template-columns:1fr}.abc-donut-content{flex-direction:column}.abc-pagination{flex-direction:column}}

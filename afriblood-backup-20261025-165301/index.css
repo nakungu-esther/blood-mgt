@@ -1,0 +1,557 @@
+@import "tailwindcss";
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;color:#172235;background:#f5f7fb;font-synthesis:none;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}body{margin:0;min-width:320px}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}input,select,textarea{outline-color:#d12c47}::selection{background:#f8ccd4;color:#81182a}
+.soft-shadow{box-shadow:0 3px 18px rgba(22,35,63,.035)}.field{width:100%;border:1px solid #e2e7f0;background:#fff;border-radius:12px;padding:11px 13px;color:#1c2940;transition:border-color .15s,box-shadow .15s}.field:focus{outline:none;border-color:#d12c47;box-shadow:0 0 0 3px #d12c4717}.action{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #e2e7f0;background:white;border-radius:12px;padding:10px 14px;font-size:13px;font-weight:650;transition:background .15s,transform .15s}.action:hover{background:#f7f8fb}.action-primary{border-color:#bd2842;background:#bd2842;color:white}.action-primary:hover{background:#9e2037}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8793a6}.surface{border:1px solid #e7ebf2;background:#fff;border-radius:20px;box-shadow:0 4px 25px #26324a08}.subtle-scroll::-webkit-scrollbar{width:5px}.subtle-scroll::-webkit-scrollbar-thumb{background:#d8dfea;border-radius:6px}
+
+/* AfriBlood operations dashboard */
+.ab-panel{border:1px solid #e7edf4;background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(16,36,62,.035)}
+.ab-panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:17px}
+.ab-panel-head h2{font-size:14px;font-weight:800;letter-spacing:-.015em;color:#19304f}
+.ab-panel-head p{font-size:11px;color:#8190a5;margin-top:4px}
+.ab-panel-head a{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:11px;font-weight:700;color:#3373d1}
+.ab-stat-icon{display:flex;height:48px;width:48px;flex-shrink:0;align-items:center;justify-content:center;border-radius:50%}
+.ab-stat-icon.rose{background:#fff0f2;color:#e84258}.ab-stat-icon.green{background:#e5f8ef;color:#1ca879}.ab-stat-icon.amber{background:#fff4e2;color:#e9a11c}.ab-stat-icon.blue{background:#eaf2ff;color:#367ce1}
+.ab-ai-panel{background:linear-gradient(110deg,#0d2340 0%,#183c65 60%,#0b2545 100%);box-shadow:0 4px 18px #142d4c15}
+.ab-dashboard .recharts-default-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+
+.ab-dashboard .ab-panel{box-shadow:0 2px 8px rgba(24,53,87,.035)}
+.ab-dashboard .ab-panel-head h2{color:#10294a}
+.ab-dashboard .ab-stat-icon{height:50px;width:50px}
+
+/* AfriBlood professional dashboard */
+.ab-pro {
+  --ab-navy: #14283c;
+  --ab-teal: #087e83;
+  --ab-border: #e4eaf0;
+  color: var(--ab-navy);
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 8px 4px 32px;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.ab-pro * { box-sizing: border-box; }
+.ab-pro a { text-decoration: none; }
+
+.ab-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.ab-eyebrow {
+  color: #087e83;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  margin-bottom: 8px;
+}
+
+.ab-heading h1 {
+  font-size: clamp(23px, 2.3vw, 30px);
+  font-weight: 750;
+  letter-spacing: -.7px;
+  margin: 0 0 6px;
+}
+
+.ab-heading p,
+.ab-section-heading p,
+.ab-panel-heading p {
+  color: #758497;
+  font-size: 12px;
+  margin: 0;
+}
+
+.ab-refresh {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dce5ec;
+  background: #fff;
+  color: #284156;
+  border-radius: 8px;
+  padding: 9px 13px;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.ab-refresh:disabled { opacity: .55; }
+
+.ab-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.ab-metric {
+  display: block;
+  min-height: 127px;
+  background: #fff;
+  border: 1px solid var(--ab-border);
+  border-radius: 12px;
+  padding: 15px 17px;
+  box-shadow: 0 3px 12px rgba(20,40,60,.025);
+  transition: border-color .15s, transform .15s;
+}
+
+.ab-metric:hover {
+  border-color: #9bcfd0;
+  transform: translateY(-1px);
+}
+
+.ab-metric-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ab-metric-icon,
+.ab-action-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #e7f5f4;
+  color: #087e83;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ab-muted { color: #9eacb9; }
+
+.ab-metric-value {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 780;
+  letter-spacing: -.8px;
+  color: #14283c;
+  margin-top: 11px;
+}
+
+.ab-metric-label {
+  font-size: 12px;
+  font-weight: 550;
+  color: #627487;
+  margin-top: 3px;
+}
+
+.ab-unavailable {
+  display: block;
+  font-size: 10px;
+  color: #ad6d35;
+  margin-top: 5px;
+}
+
+.ab-section-heading { margin-bottom: 13px; }
+
+.ab-section-heading h2,
+.ab-panel-heading h2 {
+  font-size: 15px;
+  font-weight: 750;
+  margin: 0 0 4px;
+  letter-spacing: -.2px;
+}
+
+.ab-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.ab-action {
+  background: #fff;
+  border: 1px solid var(--ab-border);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 650;
+  color: #233b50;
+}
+
+.ab-action > span:nth-child(2) { flex: 1; }
+.ab-action:hover { border-color: #87c6c7; }
+
+.ab-content-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ab-panel {
+  background: #fff;
+  border: 1px solid var(--ab-border);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+
+.ab-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ab-panel-heading a {
+  color: #087e83;
+  font-size: 11px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.ab-status-list {
+  display: grid;
+  gap: 16px;
+  padding: 4px 0;
+}
+
+.ab-status-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  color: #5b6e80;
+  font-size: 11px;
+}
+
+.ab-status-label strong { color: #1b3548; }
+
+.ab-track {
+  height: 7px;
+  background: #edf3f5;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.ab-track div {
+  height: 100%;
+  background: #148a8e;
+  border-radius: 20px;
+}
+
+.ab-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.ab-profile-avatar {
+  width: 42px;
+  height: 42px;
+  background: #e4f4f2;
+  color: #087e83;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.ab-profile strong { font-size: 13px; }
+.ab-profile p { font-size: 11px; color: #7b8b99; margin: 3px 0 0; }
+
+.ab-detail {
+  border-top: 1px solid #edf1f4;
+  padding: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.ab-detail span { color: #81909e; }
+.ab-detail strong { text-align: right; overflow-wrap: anywhere; }
+.ab-teal { color: #087e83; }
+
+.ab-empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 130px;
+  justify-content: center;
+  color: #83919d;
+  font-size: 12px;
+  text-align: center;
+}
+
+.ab-requests { margin-bottom: 14px; }
+.ab-table-wrap { width: 100%; overflow-x: auto; }
+
+.ab-table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  font-size: 11px;
+}
+
+.ab-table th {
+  padding: 11px 12px;
+  color: #7c8a98;
+  font-weight: 700;
+  background: #f7fafb;
+  white-space: nowrap;
+}
+
+.ab-table td {
+  padding: 13px 12px;
+  color: #354b5d;
+  border-bottom: 1px solid #edf1f4;
+}
+
+.ab-footer-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8b99a5;
+  font-size: 10px;
+  padding: 5px 0;
+}
+
+@media (max-width: 1000px) {
+  .ab-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ab-content-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 650px) {
+  .ab-metrics { gap: 9px; }
+  .ab-metric { padding: 12px; }
+  .ab-metric-value { font-size: 23px; }
+  .ab-actions { grid-template-columns: 1fr; }
+  .ab-heading { flex-direction: column; }
+  .ab-panel { padding: 15px; }
+}
+
+/* AfriBlood staff administration */
+.staff-admin {
+  max-width: 1500px;
+  margin: auto;
+  padding: 8px 4px 30px;
+  color: #183247;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.staff-admin * { box-sizing: border-box; }
+
+.staff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.staff-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #087e83;
+}
+
+.staff-header h1 {
+  margin: 7px 0;
+  font-size: 27px;
+  font-weight: 750;
+}
+
+.staff-header p,
+.staff-panel-title p {
+  font-size: 12px;
+  color: #7c8b99;
+  margin: 0;
+}
+
+.staff-secondary,
+.staff-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 11px 15px;
+}
+
+.staff-secondary {
+  background: white;
+  border: 1px solid #e0e8ee;
+  color: #274357;
+}
+
+.staff-primary {
+  width: 100%;
+  border: none;
+  background: #087e83;
+  color: white;
+}
+
+.staff-primary:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.staff-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.staff-stat {
+  background: white;
+  border: 1px solid #e4ebf0;
+  border-radius: 11px;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.staff-stat svg { color: #087e83; }
+.staff-stat strong { font-size: 22px; }
+.staff-stat span { font-size: 11px; color: #7c8b99; }
+
+.staff-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.staff-panel {
+  background: white;
+  border: 1px solid #e4ebf0;
+  border-radius: 12px;
+  padding: 21px;
+  min-width: 0;
+}
+
+.staff-panel-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.staff-panel-title > svg { color: #087e83; }
+
+.staff-panel-title h2 {
+  font-size: 15px;
+  margin: 0 0 5px;
+}
+
+.staff-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.staff-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #3d5264;
+}
+
+.staff-form input,
+.staff-form select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #dce5ec;
+  border-radius: 8px;
+  background: white;
+  color: #183247;
+  font-size: 12px;
+  outline-color: #087e83;
+}
+
+.staff-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.staff-notice {
+  background: #f0f7f8;
+  color: #486c73;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.staff-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.staff-error { background: #fff1f0; color: #a43f3a; }
+.staff-success { background: #eaf8f2; color: #187452; }
+
+.staff-table-wrap { overflow-x: auto; }
+
+.staff-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 11px;
+}
+
+.staff-table th {
+  background: #f6f9fb;
+  padding: 12px;
+  color: #748697;
+  white-space: nowrap;
+}
+
+.staff-table td {
+  border-bottom: 1px solid #edf1f4;
+  padding: 13px 12px;
+  color: #3c5265;
+}
+
+.staff-table small {
+  display: block;
+  color: #8997a4;
+  margin-top: 4px;
+}
+
+.staff-empty {
+  text-align: center;
+  padding: 50px 10px;
+  color: #8292a0;
+  font-size: 12px;
+}
+
+@media (max-width: 1000px) {
+  .staff-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .staff-stats { grid-template-columns: 1fr; }
+  .staff-two { grid-template-columns: 1fr; }
+  .staff-header { flex-direction: column; }
+}
+
+/* AfriBlood screenshot-inspired facilities screen */
+.fl-page{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#122b4c;max-width:1700px;margin:0 auto;padding:3px 0 30px}.fl-page *{box-sizing:border-box}.fl-header,.fl-heading,.fl-header-actions,.fl-btn,.fl-panel-head,.fl-facility-name,.fl-location,.fl-pagination,.fl-pagination>div,.fl-recent{display:flex;align-items:center}.fl-header{justify-content:space-between;gap:18px;margin:0 0 20px}.fl-heading{gap:18px}.fl-heading-icon{width:56px;height:56px;display:grid;place-items:center;background:#e6f1ff;color:#1674f5;border-radius:50%}.fl-heading h1{font-size:27px;font-weight:780;letter-spacing:-.6px;margin:0}.fl-heading p{font-size:12px;color:#6480a7;margin:4px 0 0}.fl-header-actions{gap:9px}.fl-btn{gap:8px;justify-content:center;border-radius:6px;border:1px solid #d8e4f2;font-size:12px;font-weight:650;padding:10px 15px;cursor:pointer}.fl-primary{background:#1769ed;color:#fff;border-color:#1769ed}.fl-outline{background:#fff;color:#27518b}.fl-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}.fl-stat{background:white;border:1px solid #e2eaf4;border-radius:6px;min-height:110px;padding:17px;display:flex;align-items:center;gap:17px;box-shadow:0 3px 12px #203b6110}.fl-stat-icon{width:49px;height:49px;flex-shrink:0;display:grid;place-items:center;background:#e6f1ff;color:#1474fa;border-radius:50%}.fl-stat:nth-child(2) .fl-stat-icon{background:#ffeff1;color:#e63854}.fl-stat-label{display:block;font-size:11px;color:#5576a1}.fl-stat strong{display:block;font-size:23px;line-height:1.3;margin:4px 0;font-weight:800}.fl-stat small{display:block;font-size:10px;color:#8aa0bc}.fl-main{display:grid;grid-template-columns:minmax(0,2.9fr) minmax(275px,1fr);gap:15px;align-items:start}.fl-panel{background:white;border:1px solid #e2eaf4;border-radius:7px;box-shadow:0 3px 12px #203b610a;overflow:hidden}.fl-filters{padding:13px;display:grid;grid-template-columns:minmax(200px,2fr) repeat(3,minmax(115px,1fr));gap:10px;border-bottom:1px solid #e8eff7}.fl-filters select,.fl-search{border:1px solid #dce7f5;border-radius:6px;background:white;color:#2d5183;height:37px;padding:0 11px;font-size:11px;min-width:0}.fl-search{display:flex;align-items:center;gap:10px}.fl-search svg{color:#6584b1;flex-shrink:0}.fl-search input{outline:0;border:0;min-width:0;width:100%;font-size:11px;color:#18365b}.fl-table-scroll{overflow-x:auto}.fl-table{border-collapse:collapse;width:100%;min-width:790px;text-align:left;font-size:11px}.fl-table th{background:#f5f9fe;color:#54729c;font-size:10px;font-weight:700;padding:14px 12px;white-space:nowrap}.fl-table td{padding:11px 12px;border-top:1px solid #e8eff7;color:#385b87;white-space:nowrap}.fl-table tr:hover td{background:#f8fbff}.fl-facility-name{gap:9px;color:#1d3963}.fl-facility-name strong{font-weight:650;max-width:170px;overflow:hidden;text-overflow:ellipsis}.fl-type-icon{width:34px;height:34px;display:inline-grid;place-items:center;border-radius:50%;flex-shrink:0;background:#e4efff;color:#1371ed}.fl-type-icon.fl-blood_bank{background:#ffe8ed;color:#e73550}.fl-type-icon.fl-laboratory{background:#ddf8f7;color:#0ca1ad}.fl-type-icon.fl-collection_center{background:#f1e8ff;color:#8754df}.fl-pill{display:inline-flex;align-items:center;border-radius:99px;padding:5px 9px;background:#e6f0ff;color:#176bf1;font-size:10px}.fl-pill.fl-blood_bank{background:#ffe8ec;color:#e33c56}.fl-pill.fl-laboratory{background:#dff8f9;color:#009aa5}.fl-pill.fl-collection_center{background:#f1e9ff;color:#8350d5}.fl-pill.fl-active{background:#d9f9eb;color:#049b65}.fl-pill.fl-neutral{background:#fff0df;color:#ba7b18}.fl-location{gap:5px}.fl-icon-button{background:transparent;border:0;color:#31527d;cursor:pointer}.fl-pagination{justify-content:space-between;padding:12px 14px;color:#7890b0;font-size:10px;border-top:1px solid #e8eff7}.fl-pagination>div{gap:10px}.fl-pagination button{border:1px solid #e0e9f5;background:#f8fbff;color:#38649b;border-radius:5px;padding:5px;cursor:pointer}.fl-pagination button:disabled{opacity:.4;cursor:default}.fl-note{padding:0 13px 12px;margin:0;color:#8798ac;font-size:10px;line-height:1.5}.fl-aside{display:grid;gap:12px}.fl-panel-head{justify-content:space-between;padding:14px 15px 5px}.fl-panel h3{font-size:13px;font-weight:760;margin:0}.fl-soft{display:flex;align-items:center;gap:4px;font-size:10px;color:#5a83b3}.fl-map{height:220px;display:flex;justify-content:center;align-items:center}.fl-map svg{height:100%;max-width:100%}.fl-map-caption{color:#7892b1;font-size:10px;line-height:1.5;padding:0 15px;margin:0 0 9px}.fl-legend{display:flex;flex-wrap:wrap;gap:7px;padding:0 15px 15px;font-size:9px;color:#6c86a5}.fl-side-panel{padding:15px}.fl-side-row{display:flex;align-items:center;gap:10px;border-bottom:1px solid #e8eff7;padding:11px 0;font-size:11px;color:#46668e}.fl-side-row:last-child{border:0}.fl-side-row strong{margin-left:auto;color:#18365d}.fl-dot{width:9px;height:9px;border-radius:50%;background:#20c58c}.fl-side-row:nth-of-type(2) .fl-dot{background:#f3b13f}.fl-side-row:nth-of-type(3) .fl-dot{background:#8094af}.fl-recent{gap:10px;padding:11px 0;border-bottom:1px solid #e8eff7}.fl-recent strong{font-size:10px;display:block;font-weight:650}.fl-recent small{font-size:10px;color:#8ca1b9}.fl-recent .fl-type-icon{width:28px;height:28px}.fl-recent .fl-type-icon svg{width:15px}.fl-empty{padding:45px 15px;text-align:center;color:#7890ad;font-size:12px}.fl-empty-small{font-size:11px;color:#8196b0}.fl-error{background:#fff1f1;color:#ad3045;padding:12px;margin-bottom:12px;display:flex;gap:9px;border-radius:7px;font-size:12px}.fl-modal-backdrop{position:fixed;inset:0;background:#10243eaa;display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}.fl-modal{background:white;border-radius:12px;width:min(100%,600px);max-height:90vh;overflow:auto;box-shadow:0 20px 60px #0003}.fl-modal-head{padding:20px 24px;border-bottom:1px solid #e6edf6;display:flex;align-items:center;justify-content:space-between}.fl-modal-head h2{font-size:20px;margin:0}.fl-modal-head p{font-size:11px;color:#7e91a9;margin:5px 0 0}.fl-modal-head button{border:0;background:transparent;cursor:pointer}.fl-form{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:23px}.fl-form label{font-size:11px;color:#36577e;font-weight:650}.fl-form input,.fl-form select{display:block;width:100%;margin-top:7px;border:1px solid #dce7f4;border-radius:6px;padding:11px;color:#18365d;background:white}.fl-form-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px;margin-top:10px}.fl-details{padding:15px 24px}.fl-details>div{display:grid;grid-template-columns:140px 1fr;gap:10px;padding:11px 0;border-bottom:1px solid #e9eef5;font-size:12px}.fl-details span{color:#7890ad}.fl-details strong{overflow-wrap:anywhere}.fl-page button:focus-visible,.fl-page input:focus-visible,.fl-page select:focus-visible{outline:2px solid #2977ec;outline-offset:2px}@media(max-width:1200px){.fl-main{grid-template-columns:1fr}.fl-aside{grid-template-columns:repeat(3,minmax(0,1fr))}.fl-filters{grid-template-columns:1fr 1fr}}@media(max-width:800px){.fl-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.fl-aside{grid-template-columns:1fr}.fl-header{flex-wrap:wrap}}@media(max-width:520px){.fl-stats{grid-template-columns:1fr}.fl-filters{grid-template-columns:1fr}.fl-form{grid-template-columns:1fr}.fl-heading-icon{width:43px;height:43px}.fl-heading h1{font-size:23px}}
+

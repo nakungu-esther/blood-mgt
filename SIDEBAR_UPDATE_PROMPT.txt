@@ -1,0 +1,20 @@
+Update the existing AfriBlood React TypeScript Tailwind sidebar directly.
+
+Requirements:
+1. Expanded sidebar width: 208px (w-52).
+2. Collapsed sidebar width: 64px (w-16).
+3. Place the collapse/expand button INSIDE the sidebar header.
+4. Use PanelLeftClose and PanelLeftOpen icons from lucide-react.
+5. When collapsed, show icons only with accessible tooltips.
+6. Keep all existing navigation links, role permissions and active states.
+7. Preserve the existing logo, colours, nested menus and logout.
+8. Make the main content adjust automatically to sidebar width.
+9. Add a smooth 200ms width transition.
+10. Save collapsed state in localStorage.
+11. Preserve the mobile sidebar drawer.
+12. Remove any duplicate sidebar toggle from the dashboard header.
+13. Do not create a new sidebar component.
+14. Do not modify backend APIs or unrelated pages.
+15. Run npm run build and fix any errors.
+
+Inspect the existing project files and IMPLEMENT these changes.

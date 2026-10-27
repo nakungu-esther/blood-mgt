@@ -1,0 +1,4 @@
+import { useState } from 'react';
+import { API_URL, api } from '../lib/api';
+import { useAuth } from '../context/AuthContext';
+export default function SystemStatus(){const {token}=useAuth();const [result,setResult]=useState('Not checked');const [busy,setBusy]=useState(false);async function check(){setBusy(true);try{await api('/auth/me',{},token);setResult('Backend reachable; authenticated session accepted.');}catch(e){setResult(e instanceof Error?e.message:'Request failed');}finally{setBusy(false);}}return <div className="space-y-5"><h1 className="text-3xl font-bold">System Status</h1><div className="rounded-2xl border bg-white p-6"><p className="text-sm text-slate-500">Configured API base</p><p className="mt-2 break-all font-mono">{API_URL}</p><button disabled={busy} onClick={()=>void check()} className="mt-5 rounded-xl bg-red-600 px-5 py-3 text-white">{busy?'Checking…':'Test authenticated API'}</button><p className="mt-4 text-sm">{result}</p></div></div>}

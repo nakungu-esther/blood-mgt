@@ -1,0 +1,423 @@
+﻿import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Droplets, CheckCircle2, Clock3, AlertTriangle,
+  RefreshCw, Search, Plus, Truck, ClipboardList,
+  BarChart3, Eye, Package, Download
+} from 'lucide-react';
+import { api } from '../lib/api';
+import { useAuth } from '../context/AuthContext';
+import './InventoryPage.css';
+
+type Item = Record<string, unknown>;
+
+function records(value: unknown): Item[] {
+  if (Array.isArray(value)) return value as Item[];
+  if (value && typeof value === 'object') {
+    const obj = value as Record<string, unknown>;
+    for (const key of ['data', 'items', 'results']) {
+      if (Array.isArray(obj[key])) return obj[key] as Item[];
+      const nested = obj[key];
+      if (nested && typeof nested === 'object') {
+        const inner = nested as Record<string, unknown>;
+        if (Array.isArray(inner.data)) return inner.data as Item[];
+      }
+    }
+  }
+  return [];
+}
+
+function str(value: unknown): string {
+  return value == null ? '' : String(value);
+}
+
+function group(value: unknown): string {
+  return str(value).replace('_POS', '+').replace('_NEG', '-');
+}
+
+function date(value: unknown): string {
+  if (!value) return '—';
+  const d = new Date(str(value));
+  return Number.isNaN(d.getTime()) ? '—' : d.toLocaleDateString();
+}
+
+function csvCell(value: unknown): string {
+  return '"' + str(value).replaceAll('"', '""') + '"';
+}
+
+export default function InventoryPage() {
+  const { token, user } = useAuth();
+  const [units, setUnits] = useState<Item[]>([]);
+  const [facilities, setFacilities] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [reload, setReload] = useState(0);
+  const [search, setSearch] = useState('');
+  const [bloodGroup, setBloodGroup] = useState('');
+  const [component, setComponent] = useState('');
+  const [status, setStatus] = useState('');
+  const [facility, setFacility] = useState('');
+  const [page, setPage] = useState(1);
+  const [selected, setSelected] = useState<Item | null>(null);
+
+  useEffect(() => {
+    let live = true;
+    async function load() {
+      setLoading(true);
+      setError('');
+      try {
+        const inventory = await api<unknown>('/inventory', {}, token);
+        if (live) setUnits(records(inventory));
+      } catch (e) {
+        if (live) {
+          setUnits([]);
+          setError(e instanceof Error ? e.message : 'Inventory API unavailable');
+        }
+      }
+
+      try {
+        const response = await api<unknown>('/facilities', {}, token);
+        if (live) setFacilities(records(response));
+      } catch {
+        if (live) setFacilities([]);
+      }
+
+      if (live) setLoading(false);
+    }
+    void load();
+    return () => { live = false; };
+  }, [token, reload]);
+
+  const facilityName = (id: unknown) => {
+    const match = facilities.find(f => str(f.id) === str(id));
+    return str(match?.name || id || '—');
+  };
+
+  const filtered = useMemo(() => units.filter(unit => {
+    const g = str(unit.bloodGroup);
+    const c = str(unit.component);
+    const s = str(unit.status);
+    const f = str(unit.facilityId);
+    const q = search.toLowerCase();
+    const text = [
+      unit.unitCode, unit.code, unit.id, g, c, s,
+      f, facilityName(f)
+    ].join(' ').toLowerCase();
+
+    return (!search || text.includes(q))
+      && (!bloodGroup || g === bloodGroup)
+      && (!component || c === component)
+      && (!status || s === status)
+      && (!facility || f === facility);
+  }), [units, facilities, search, bloodGroup, component, status, facility]);
+
+  const now = Date.now();
+  const sevenDays = 7 * 24 * 60 * 60 * 1000;
+
+  const available = units.filter(u => str(u.status).toUpperCase() === 'AVAILABLE').length;
+  const quarantined = units.filter(u => str(u.status).toUpperCase() === 'QUARANTINED').length;
+  const expiring = units.filter(u => {
+    const expiry = u.expiresAt || u.expiryDate;
+    if (!expiry) return false;
+    const timestamp = new Date(str(expiry)).getTime();
+    return !Number.isNaN(timestamp)
+      && timestamp >= now
+      && timestamp <= now + sevenDays
+      && str(u.status).toUpperCase() === 'AVAILABLE';
+  }).length;
+
+  const groups = useMemo(() => {
+    const counts: Record<string, number> = {};
+    units.forEach(u => {
+      const key = group(u.bloodGroup) || 'Unknown';
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  }, [units]);
+
+  const colors = [
+    '#ec273b', '#2379ed', '#17b979', '#ff971f',
+    '#7545dc', '#2098aa', '#aebed3', '#66788c'
+  ];
+
+  let progress = 0;
+  const stops = groups.map(([name, count], index) => {
+    const start = progress;
+    progress += units.length ? count / units.length * 100 : 0;
+    return `${colors[index % colors.length]} ${start}% ${progress}%`;
+  }).join(', ');
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / 8));
+  const shown = filtered.slice((page - 1) * 8, page * 8);
+  const unique = (key: string) => [...new Set(units.map(u => str(u[key])).filter(Boolean))].sort();
+
+  function exportCsv() {
+    const headers = [
+      'Unit Code', 'Blood Group', 'Component',
+      'Status', 'Collected At', 'Expires At', 'Facility'
+    ];
+    const lines = [
+      headers.map(csvCell).join(','),
+      ...filtered.map(u => [
+        u.unitCode || u.code || u.id,
+        group(u.bloodGroup), u.component, u.status,
+        u.collectedAt || u.collectionDate,
+        u.expiresAt || u.expiryDate,
+        facilityName(u.facilityId)
+      ].map(csvCell).join(','))
+    ];
+    const blob = new Blob([lines.join('\r\n')], {
+      type: 'text/csv;charset=utf-8'
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'afriblood-inventory.csv';
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
+  const canManage = [
+    'SUPER_ADMIN', 'BLOOD_BANK_OFFICER', 'FACILITY_ADMIN'
+  ].includes(user?.role || '');
+
+  return (
+    <main className="abi">
+      <header className="abi-heading">
+        <div className="abi-heading-title">
+          <span className="abi-heading-icon"><Droplets size={27}/></span>
+          <div>
+            <h1>Blood Inventory</h1>
+            <p>Blood stock and availability across authorised facilities.</p>
+          </div>
+        </div>
+        <button className="abi-outline" onClick={() => setReload(n => n + 1)}>
+          <RefreshCw size={15}/> {loading ? 'Loading' : 'Refresh'}
+        </button>
+      </header>
+
+      {error && <div className="abi-error" role="alert">{error}</div>}
+
+      <section className="abi-kpis">
+        {[
+          { label: 'Total Units', count: units.length, icon: Droplets, color: 'blue' },
+          { label: 'Available Units', count: available, icon: CheckCircle2, color: 'green' },
+          { label: 'Expiring Soon (7 days)', count: expiring, icon: Clock3, color: 'orange' },
+          { label: 'Quarantined', count: quarantined, icon: AlertTriangle, color: 'red' }
+        ].map(kpi => {
+          const Icon = kpi.icon;
+          return (
+            <div className={`abi-kpi abi-${kpi.color}`} key={kpi.label}>
+              <span className="abi-kpi-icon"><Icon size={24}/></span>
+              <div>
+                <span className="abi-kpi-label">{kpi.label}</span>
+                <strong>{loading ? '…' : error ? '—' : kpi.count.toLocaleString()}</strong>
+                <small>Current API records</small>
+              </div>
+            </div>
+          );
+        })}
+      </section>
+
+      <div className="abi-layout">
+        <div className="abi-main">
+          <section className="abi-charts">
+            <article className="abi-card">
+              <div className="abi-card-heading">
+                <h2><BarChart3 size={18}/> Stock by Status</h2>
+                <span>Current inventory</span>
+              </div>
+              {units.length === 0 ? (
+                <p className="abi-empty">No inventory records available.</p>
+              ) : (
+                <div className="abi-status-bars">
+                  {['AVAILABLE','RESERVED','ISSUED','QUARANTINED'].map((s, i) => {
+                    const count = units.filter(u => str(u.status).toUpperCase() === s).length;
+                    return (
+                      <div key={s} className="abi-bar-row">
+                        <span>{s}</span>
+                        <div className="abi-bar-track">
+                          <div
+                            style={{
+                              width: `${count / Math.max(1, units.length) * 100}%`,
+                              background: colors[i]
+                            }}
+                          />
+                        </div>
+                        <strong>{count}</strong>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              <p className="abi-footnote">
+                Historical stock trends require dated inventory snapshots or movement records.
+              </p>
+            </article>
+
+            <article className="abi-card">
+              <div className="abi-card-heading">
+                <h2><Droplets size={18}/> Stock by Blood Group</h2>
+              </div>
+              {units.length === 0 ? (
+                <p className="abi-empty">No blood group data available.</p>
+              ) : (
+                <div className="abi-donut-wrap">
+                  <div
+                    className="abi-donut"
+                    style={{ background: `conic-gradient(${stops})` }}
+                  >
+                    <div>
+                      <strong>{units.length.toLocaleString()}</strong>
+                      <small>Total units</small>
+                    </div>
+                  </div>
+                  <div className="abi-legend">
+                    {groups.map(([name, count], i) => (
+                      <div key={name}>
+                        <i style={{background:colors[i % colors.length]}}/>
+                        <span>{name}</span>
+                        <strong>{Math.round(count / units.length * 100)}%</strong>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </article>
+          </section>
+
+          <section className="abi-card abi-filter-card">
+            <div className="abi-filter-title"><Search size={16}/> Filters</div>
+            <div className="abi-filters">
+              <input
+                placeholder="Search unit code..."
+                value={search}
+                onChange={e => {setSearch(e.target.value);setPage(1);}}
+              />
+              <select value={bloodGroup} onChange={e => {setBloodGroup(e.target.value);setPage(1);}}>
+                <option value="">All blood groups</option>
+                {unique('bloodGroup').map(g => <option key={g} value={g}>{group(g)}</option>)}
+              </select>
+              <select value={component} onChange={e => {setComponent(e.target.value);setPage(1);}}>
+                <option value="">All components</option>
+                {unique('component').map(c => <option key={c}>{c}</option>)}
+              </select>
+              <select value={status} onChange={e => {setStatus(e.target.value);setPage(1);}}>
+                <option value="">All statuses</option>
+                {unique('status').map(s => <option key={s}>{s}</option>)}
+              </select>
+              <select value={facility} onChange={e => {setFacility(e.target.value);setPage(1);}}>
+                <option value="">All facilities</option>
+                {unique('facilityId').map(f => <option key={f} value={f}>{facilityName(f)}</option>)}
+              </select>
+              <button className="abi-outline" onClick={() => {
+                setSearch('');setBloodGroup('');setComponent('');
+                setStatus('');setFacility('');setPage(1);
+              }}>Reset</button>
+            </div>
+          </section>
+
+          <section className="abi-card abi-table-card">
+            <div className="abi-card-heading">
+              <h2><Package size={18}/> Blood Units</h2>
+              <button className="abi-outline" onClick={exportCsv}>
+                <Download size={14}/> Export CSV
+              </button>
+            </div>
+            <div className="abi-table-scroll">
+              <table>
+                <thead><tr>
+                  <th>Unit Code</th><th>Blood Group</th><th>Component</th>
+                  <th>Status</th><th>Collected At</th><th>Expires At</th>
+                  <th>Facility</th><th>Actions</th>
+                </tr></thead>
+                <tbody>
+                  {shown.map((u, i) => (
+                    <tr key={str(u.id || i)}>
+                      <td><strong>{str(u.unitCode || u.code || u.id)}</strong></td>
+                      <td>{group(u.bloodGroup) || '—'}</td>
+                      <td>{str(u.component).replaceAll('_',' ') || '—'}</td>
+                      <td><span className={`abi-pill abi-pill-${str(u.status).toLowerCase()}`}>{str(u.status) || '—'}</span></td>
+                      <td>{date(u.collectedAt || u.collectionDate)}</td>
+                      <td>{date(u.expiresAt || u.expiryDate)}</td>
+                      <td>{facilityName(u.facilityId)}</td>
+                      <td><button className="abi-view" onClick={() => setSelected(u)}><Eye size={14}/> View</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {!loading && shown.length === 0 && (
+                <p className="abi-empty">No matching blood units found.</p>
+              )}
+            </div>
+            <div className="abi-pagination">
+              <span>Showing {shown.length} of {filtered.length} records</span>
+              <div>
+                <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>Previous</button>
+                <span>Page {page} of {totalPages}</span>
+                <button disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>Next</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside className="abi-aside">
+          <section className="abi-card abi-alerts">
+            <h2><AlertTriangle size={18}/> Alerts</h2>
+            {expiring > 0 ? (
+              <div className="abi-alert-item">
+                <Clock3 size={18}/>
+                <span><strong>{expiring} units expiring soon</strong><small>Within the next 7 days</small></span>
+              </div>
+            ) : (
+              <p className="abi-empty">No upcoming expiries identified in returned records.</p>
+            )}
+            {quarantined > 0 && (
+              <div className="abi-alert-item">
+                <AlertTriangle size={18}/>
+                <span><strong>{quarantined} quarantined units</strong><small>Not available for clinical issue</small></span>
+              </div>
+            )}
+          </section>
+
+          <section className="abi-card abi-quick">
+            <h2><Plus size={18}/> Quick Actions</h2>
+            {canManage && <Link to="/donations"><Plus size={16}/> Register New Blood Unit</Link>}
+            <Link to="/blood-transfers"><Truck size={16}/> Record Transfer</Link>
+            <Link to="/hospital-requests"><ClipboardList size={16}/> Submit Blood Request</Link>
+            <Link to="/reports"><BarChart3 size={16}/> View Reports</Link>
+            <p className="abi-footnote">
+              Registration opens the existing donations module until a verified
+              blood-unit creation endpoint is available.
+            </p>
+          </section>
+
+          <section className="abi-card abi-health">
+            <h2><CheckCircle2 size={18}/> Inventory Overview</h2>
+            <div className="abi-health-ring">
+              <strong>{units.length ? Math.round(available / units.length * 100) : '—'}%</strong>
+              <small>Available units</small>
+            </div>
+            <p>Availability share of returned inventory records. This is not a clinical stock-sufficiency score.</p>
+          </section>
+        </aside>
+      </div>
+
+      {selected && (
+        <div className="abi-modal-backdrop" onClick={() => setSelected(null)}>
+          <div className="abi-modal" onClick={e => e.stopPropagation()}>
+            <div className="abi-card-heading">
+              <h2>Blood Unit Details</h2>
+              <button className="abi-outline" onClick={() => setSelected(null)}>Close</button>
+            </div>
+            {Object.entries(selected).filter(([key]) => !/patient|donor|password|token/i.test(key)).map(([key,value]) => (
+              <div className="abi-detail" key={key}>
+                <span>{key}</span><strong>{typeof value === 'object' ? '—' : str(value)}</strong>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </main>
+  );
+}

@@ -1,0 +1,76 @@
+﻿.abi{font-family:Inter,system-ui,sans-serif;color:#132947;padding:6px 2px 30px;max-width:1700px;margin:auto}
+.abi *{box-sizing:border-box}
+.abi-heading,.abi-heading-title,.abi-card-heading{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.abi-heading{margin-bottom:18px}
+.abi-heading-title{justify-content:flex-start}
+.abi-heading-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:#eaf2ff;color:#0860d8}
+.abi-heading h1{font-size:27px;letter-spacing:-.6px;font-weight:780;margin:0 0 4px}
+.abi-heading p{font-size:12px;color:#6e819a;margin:0}
+.abi-outline{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #cbdaf0;border-radius:7px;background:white;color:#1456ac;padding:9px 12px;font-size:11px;font-weight:700;cursor:pointer}
+.abi-outline:hover{background:#f1f6ff}
+.abi-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:16px}
+.abi-kpi{display:flex;align-items:center;gap:14px;padding:18px 16px;border:1px solid #dce7f5;border-radius:10px;min-height:111px;background:#fff;box-shadow:0 3px 12px #203b6b08}
+.abi-kpi-icon{width:50px;height:50px;flex-shrink:0;border-radius:50%;display:grid;place-items:center}
+.abi-blue .abi-kpi-icon{background:#dfecff;color:#0860e9}.abi-green .abi-kpi-icon{background:#d9f8eb;color:#0caa6b}.abi-orange .abi-kpi-icon{background:#fff0da;color:#ee8a05}.abi-red .abi-kpi-icon{background:#ffe3e6;color:#df2537}
+.abi-kpi-label{display:block;font-size:12px;font-weight:650}
+.abi-kpi strong{display:block;font-size:27px;font-weight:800;margin:5px 0}
+.abi-kpi small{font-size:10px;color:#8292a6}
+.abi-layout{display:grid;grid-template-columns:minmax(0,1fr) 275px;gap:15px;align-items:start}
+.abi-main,.abi-aside{display:grid;gap:15px;min-width:0}
+.abi-charts{display:grid;grid-template-columns:1.15fr 1fr;gap:15px}
+.abi-card{background:white;border:1px solid #dce7f5;border-radius:10px;padding:17px;min-width:0;box-shadow:0 3px 12px #203b6b07}
+.abi-card-heading{margin-bottom:17px}
+.abi-card h2{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:750;margin:0}
+.abi-card h2 svg{color:#0860e9}
+.abi-card-heading>span{font-size:10px;color:#8292a6}
+.abi-status-bars{display:grid;gap:18px;margin:32px 0 23px}
+.abi-bar-row{display:grid;grid-template-columns:90px 1fr 32px;gap:10px;align-items:center;font-size:10px}
+.abi-bar-row strong{text-align:right}
+.abi-bar-track{height:12px;border-radius:10px;background:#eff3fa;overflow:hidden}
+.abi-bar-track>div{height:100%;border-radius:10px}
+.abi-footnote{font-size:10px;color:#8797aa;line-height:1.5;margin:12px 0 0}
+.abi-donut-wrap{display:flex;align-items:center;justify-content:center;gap:20px;min-height:230px}
+.abi-donut{width:170px;height:170px;border-radius:50%;padding:31px;flex-shrink:0}
+.abi-donut>div{background:white;border-radius:50%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.abi-donut strong{font-size:23px}.abi-donut small{font-size:10px;color:#8493a7}
+.abi-legend{display:grid;gap:12px;min-width:95px;flex:1}
+.abi-legend>div{display:flex;align-items:center;gap:7px;font-size:10px}
+.abi-legend i{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.abi-legend span{flex:1}.abi-legend strong{font-size:10px}
+.abi-filter-card{padding:12px}
+.abi-filter-title{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:750;margin-bottom:10px}
+.abi-filters{display:grid;grid-template-columns:1.3fr repeat(4,1fr) auto;gap:8px}
+.abi-filters input,.abi-filters select{min-width:0;width:100%;background:white;border:1px solid #d5e2f1;border-radius:6px;padding:10px 8px;color:#203c61;font-size:10px}
+.abi-table-card{padding:0;overflow:hidden}
+.abi-table-card>.abi-card-heading{padding:15px 17px;margin:0}
+.abi-table-scroll{overflow-x:auto}
+.abi-table-card table{width:100%;border-collapse:collapse;font-size:10px;text-align:left}
+.abi-table-card th{background:#f0f5fc;color:#223b5f;padding:12px 10px;white-space:nowrap}
+.abi-table-card td{padding:12px 10px;border-top:1px solid #e8eef6;color:#294469;white-space:nowrap}
+.abi-pill{display:inline-block;border-radius:20px;background:#edf2f8;padding:5px 9px;font-size:10px}
+.abi-pill-available{background:#d9f7e9;color:#07834e}.abi-pill-reserved{background:#fff0db;color:#b76c00}.abi-pill-quarantined{background:#ffe0e5;color:#d31e35}.abi-pill-issued{background:#e2edff;color:#1761bb}
+.abi-view{display:inline-flex;gap:4px;align-items:center;background:#f8fbff;border:1px solid #d5e3f5;border-radius:5px;color:#085ad1;padding:5px 9px;cursor:pointer;font-size:10px}
+.abi-pagination{padding:12px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px;color:#7388a4}
+.abi-pagination>div{display:flex;align-items:center;gap:10px}
+.abi-pagination button{border:1px solid #d5e3f5;border-radius:5px;background:white;color:#1352a0;padding:6px 9px;cursor:pointer}
+.abi-pagination button:disabled{opacity:.4;cursor:default}
+.abi-aside .abi-card{padding:15px}
+.abi-alerts h2{color:#d32434}.abi-alerts h2 svg{color:#d32434}
+.abi-alert-item{display:flex;align-items:center;gap:10px;background:#fff2ed;border-radius:7px;margin-top:12px;padding:12px;color:#d44c25}
+.abi-alert-item strong,.abi-alert-item small{display:block}.abi-alert-item strong{font-size:11px}.abi-alert-item small{font-size:10px;margin-top:4px}
+.abi-quick{display:grid;gap:10px}
+.abi-quick>a{display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #c8d9f4;border-radius:6px;padding:10px;color:#0956bb;font-size:11px;font-weight:700;text-decoration:none}
+.abi-quick>a:first-of-type{background:#0860e9;color:white}
+.abi-health{text-align:center}.abi-health h2{text-align:left}
+.abi-health-ring{width:140px;height:140px;border:13px solid #14b875;border-radius:50%;margin:22px auto 12px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.abi-health-ring strong{font-size:28px}.abi-health-ring small{font-size:10px;color:#8293a6}
+.abi-health p{font-size:10px;color:#8293a6;line-height:1.5}
+.abi-empty{padding:28px 8px;text-align:center;font-size:11px;color:#8393a7}
+.abi-error{padding:12px;background:#fff0f0;border:1px solid #ffd1d1;color:#ac1b2e;border-radius:8px;font-size:12px;margin-bottom:15px}
+.abi-modal-backdrop{position:fixed;inset:0;background:#08172c99;display:grid;place-items:center;z-index:1000;padding:20px}
+.abi-modal{background:white;border-radius:12px;padding:20px;width:min(560px,100%);max-height:80vh;overflow:auto}
+.abi-detail{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid #edf1f7;font-size:11px}
+.abi-detail span{color:#7588a1}.abi-detail strong{text-align:right;overflow-wrap:anywhere}
+@media(max-width:1200px){.abi-layout{grid-template-columns:1fr}.abi-aside{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.abi-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.abi-charts{grid-template-columns:1fr}.abi-aside{grid-template-columns:1fr}.abi-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:550px){.abi-kpis{gap:8px}.abi-kpi{padding:10px;gap:8px}.abi-kpi-icon{width:36px;height:36px}.abi-kpi strong{font-size:21px}.abi-heading h1{font-size:22px}.abi-donut-wrap{flex-direction:column}.abi-pagination{flex-direction:column}}
